@@ -50,7 +50,9 @@ setMethod("toString", "VTableTree", function(x,
                                              max_width = NULL,
                                              fontspec = font_spec(),
                                              ttype_ok = FALSE,
-                                             round_type = c("iec", "sas")) {
+                                             # round_type = c("iec", "sas")
+                                             round_type = get_round_type(x)
+                                             ) {
   toString(
     matrix_form(x,
       indent_rownames = TRUE,
@@ -208,7 +210,7 @@ setMethod(
            indent_size = 2,
            fontspec = NULL,
            col_gap = 3L,
-           round_type = c("iec", "sas")) {
+           round_type = get_round_type(obj)) {
     stopifnot(is(obj, "VTableTree"))
     check_ccount_vis_ok(obj)
     header_content <- .tbl_header_mat(obj) # first col are for row.names

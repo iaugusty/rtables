@@ -1239,6 +1239,7 @@ build_table <- function(lyt, df,
                         col_total = if (is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
                         topleft = NULL,
                         hsep = default_hsep(),
+                        round_type = c("iec", "sas"),
                         ...) {
   if (!is(lyt, "PreDataTableLayouts")) {
     stop(
@@ -1387,6 +1388,7 @@ build_table <- function(lyt, df,
   if (table_inset(lyt) > 0) {
     table_inset(tab) <- table_inset(lyt)
   }
+  tab <- set_round_type(tab, round_type)
   tab
 }
 
