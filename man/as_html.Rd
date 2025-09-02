@@ -14,7 +14,8 @@ as_html(
   bold = c("header"),
   header_sep_line = TRUE,
   no_spaces_between_cells = FALSE,
-  expand_newlines = FALSE
+  expand_newlines = FALSE,
+  round_type = get_round_type(x)
 )
 }
 \arguments{

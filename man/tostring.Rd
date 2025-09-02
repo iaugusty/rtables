@@ -15,7 +15,7 @@
   max_width = NULL,
   fontspec = font_spec(),
   ttype_ok = FALSE,
-  round_type = c("iec", "sas")
+  round_type = get_round_type(x)
 )
 }
 \arguments{

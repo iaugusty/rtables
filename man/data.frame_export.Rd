@@ -16,6 +16,7 @@ as_result_df(
   add_tbl_name_split = FALSE,
   simplify = FALSE,
   verbose = FALSE,
+  round_type = get_round_type(tt),
   ...
 )
 

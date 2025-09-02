@@ -11,7 +11,7 @@
   indent_size = 2,
   fontspec = NULL,
   col_gap = 3L,
-  round_type = c("iec", "sas")
+  round_type = get_round_type(obj)
 )
 }
 \arguments{
