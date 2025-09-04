@@ -1248,6 +1248,8 @@ build_table <- function(lyt, df,
     )
   }
 
+  round_type <- match.arg(round_type)
+  
   ## if no columns are defined (e.g. because lyt is NULL)
   ## add a single overall column as the "most basic"
   ## table column structure that makes sense
