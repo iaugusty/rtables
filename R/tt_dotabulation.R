@@ -1239,7 +1239,7 @@ build_table <- function(lyt, df,
                         col_total = if (is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
                         topleft = NULL,
                         hsep = default_hsep(),
-                        round_type = c("iec", "sas"),
+                        round_type = c("sas", "iec"),
                         ...) {
   if (!is(lyt, "PreDataTableLayouts")) {
     stop(
