@@ -73,13 +73,17 @@ as_html <- function(x,
                     header_sep_line = TRUE,
                     no_spaces_between_cells = FALSE,
                     expand_newlines = FALSE,
-                    round_type = get_round_type(x)) {
+                    round_type = NULL) {
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
 
   stopifnot(is(x, "VTableTree"))
-
+  
+  if (is.null(round_type)) {
+    round_type <- round_type(x)
+  }
+  
   mat <- matrix_form(x, indent_rownames = TRUE, expand_newlines = expand_newlines, round_type = round_type)
 
   nlh <- mf_nlheader(mat)

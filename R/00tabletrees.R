@@ -1457,7 +1457,8 @@ setClass("VTableTree",
     page_titles = "character",
     horizontal_sep = "character",
     header_section_div = "character",
-    trailing_section_div = "character"
+    trailing_section_div = "character",
+    round_type = "character"
   )
 )
 
@@ -1607,7 +1608,8 @@ ElementaryTable <- function(kids = list(),
                             header_section_div = NA_character_,
                             hsep = default_hsep(),
                             trailing_section_div = NA_character_,
-                            inset = 0L) {
+                            inset = 0L,
+                            round_type = "iec") {
   check_ok_label(label)
   if (is.null(cinfo)) {
     if (length(kids) > 0) {
@@ -1641,7 +1643,8 @@ ElementaryTable <- function(kids = list(),
     provenance_footer = prov_footer,
     horizontal_sep = hsep,
     header_section_div = header_section_div,
-    trailing_section_div = trailing_section_div
+    trailing_section_div = trailing_section_div,
+    round_type = round_type
   )
   tab <- set_format_recursive(tab, format, na_str, FALSE)
   table_inset(tab) <- as.integer(inset)
@@ -1708,7 +1711,9 @@ TableTree <- function(kids = list(),
                       hsep = default_hsep(),
                       header_section_div = NA_character_,
                       trailing_section_div = NA_character_,
-                      inset = 0L) {
+                      inset = 0L,
+                      round_type = "iec") {
+  #round_type <- match.arg(round_type)
   check_ok_label(label)
   cinfo <- .calc_cinfo(cinfo, cont, kids)
 
@@ -1742,7 +1747,8 @@ TableTree <- function(kids = list(),
       hsep = hsep,
       header_section_div = header_section_div,
       trailing_section_div = trailing_section_div,
-      inset = inset
+      inset = inset,
+      round_type = round_type
     )
   } else {
     tab <- new("TableTree",
@@ -1764,7 +1770,8 @@ TableTree <- function(kids = list(),
       page_title_prefix = page_title,
       horizontal_sep = "-",
       header_section_div = header_section_div,
-      trailing_section_div = trailing_section_div
+      trailing_section_div = trailing_section_div,
+      round_type = round_type
     ) ## this is overridden below to get recursiveness
     tab <- set_format_recursive(tab, format, na_str, FALSE)
 

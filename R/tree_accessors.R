@@ -4621,3 +4621,10 @@ setMethod(
   "obj_stat_names", "RowsVerticalSection",
   function(obj) lapply(obj, obj_stat_names)
 )
+
+setMethod("round_type", "VTableTree", function(obj) obj@round_type)
+
+setMethod("round_type<-", "VTableTree", function(obj, value) {
+  obj@round_type <- value
+  obj
+})

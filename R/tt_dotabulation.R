@@ -1390,7 +1390,7 @@ build_table <- function(lyt, df,
   if (table_inset(lyt) > 0) {
     table_inset(tab) <- table_inset(lyt)
   }
-  tab <- set_round_type(tab, round_type)
+  round_type(tab) <- round_type
   tab
 }
 

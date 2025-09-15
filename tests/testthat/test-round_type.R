@@ -78,12 +78,12 @@ test_that("toString method works correclty with user defined round_type", {
   )  
   
   expect_identical(
-    get_round_type(tbl_iec),
+    round_type(tbl_iec),
     "iec"
   )
   
   expect_identical(
-    get_round_type(tbl_sas),
+    round_type(tbl_sas),
     "sas"
   )
   
@@ -91,7 +91,7 @@ test_that("toString method works correclty with user defined round_type", {
   # round_type is maintained when subtable from ElementaryTable (select single column)
   sub_tbl_sas <- tbl_sas[, c(1, 2)]
   expect_identical(
-    get_round_type(sub_tbl_sas),
+    round_type(sub_tbl_sas),
     "sas"
   )  
   
@@ -182,7 +182,7 @@ test_that("round_type still available on subtable", {
   
   sub_tbl <- tbl_sas[c("SEX", "F"), ]
   expect_identical(
-    get_round_type(sub_tbl),
+    round_type(sub_tbl),
     "sas"
   )    
   

@@ -58,7 +58,7 @@ as_result_df <- function(tt, spec = NULL,
                          add_tbl_name_split = FALSE,
                          simplify = FALSE,
                          verbose = FALSE,
-                         round_type = get_round_type(tt),
+                         round_type = NULL,
                          ...) {
   data_format <- data_format[[1]]
   checkmate::assert_class(tt, "VTableTree")
@@ -71,6 +71,10 @@ as_result_df <- function(tt, spec = NULL,
   checkmate::assert_flag(add_tbl_name_split)
   checkmate::assert_flag(verbose)
 
+  if (is.null(round_type)) {
+    round_type <- round_type(tt)
+  }
+  
   if (nrow(tt) == 0) {
     return(sanitize_table_struct(tt))
   }

@@ -45,7 +45,8 @@ Viewer <- function(x, y = NULL, ...) {
     } else if (is(x, "shiny.tag")) {
       x
     } else if (is(x, "VTableTree")) {
-      as_html(x, ...)
+      round_type <- round_type(x)
+      as_html(x, round_type = round_type, ...)
     } else {
       stop("object of class rtable or shiny tag excepted for ", name)
     }
