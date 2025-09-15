@@ -15,7 +15,7 @@
   max_width = NULL,
   fontspec = font_spec(),
   ttype_ok = FALSE,
-  round_type = get_round_type(x)
+  round_type = NULL
 )
 }
 \arguments{

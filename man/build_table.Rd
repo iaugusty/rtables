@@ -38,6 +38,10 @@ the table when rendered as text. Defaults to a connected horizontal line (unicod
 charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
 information.}
 
+\item{round_type}{(\code{"iec"} or \code{"sas"})\cr the type of rounding to perform. iec,
+the default, peforms rounding compliant with IEC 60559 (see details), while
+sas performs nearest-value rounding consistent with rounding within SAS.}
+
 \item{...}{ignored.}
 }
 \value{

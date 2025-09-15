@@ -29,7 +29,8 @@ ElementaryTable(
   header_section_div = NA_character_,
   hsep = default_hsep(),
   trailing_section_div = NA_character_,
-  inset = 0L
+  inset = 0L,
+  round_type = "iec"
 )
 
 TableTree(
@@ -55,7 +56,8 @@ TableTree(
   hsep = default_hsep(),
   header_section_div = NA_character_,
   trailing_section_div = NA_character_,
-  inset = 0L
+  inset = 0L,
+  round_type = "iec"
 )
 }
 \arguments{
@@ -117,6 +119,10 @@ or \code{NA_character_} for none (the default). When generated via layouting, th
 
 \item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
 main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
+
+\item{round_type}{(\code{"iec"} or \code{"sas"})\cr the type of rounding to perform. iec,
+the default, peforms rounding compliant with IEC 60559 (see details), while
+sas performs nearest-value rounding consistent with rounding within SAS.}
 
 \item{cont}{(\code{ElementaryTable})\cr content table.}
 

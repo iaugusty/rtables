@@ -15,7 +15,7 @@ as_html(
   header_sep_line = TRUE,
   no_spaces_between_cells = FALSE,
   expand_newlines = FALSE,
-  round_type = get_round_type(x)
+  round_type = NULL
 )
 }
 \arguments{
