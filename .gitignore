@@ -9,6 +9,8 @@
 docs/*
 temp
 
+temp_Ilse/*
+
 *.rprof
 
 tmp.R

@@ -1131,7 +1131,8 @@ analyze <- function(lyt,
                     extra_args = list(),
                     show_labels = c("default", "visible", "hidden"),
                     indent_mod = 0L,
-                    section_div = NA_character_) {
+                    section_div = NA_character_,
+                    format_col = NULL) {
   show_labels <- match.arg(show_labels)
   subafun <- substitute(afun)
   # R treats a single NA value as a logical atomic. The below
@@ -1157,6 +1158,16 @@ analyze <- function(lyt,
     defrowlab <- as.character(subafun)
   } else {
     defrowlab <- var_labels
+  }
+
+  .stats <- extra_args[[".stats"]]
+  if (!extra_args[["fmt_afun"]] && !is.null(format) && length(names(format))) {
+    stopifnot("All requested .stats must have a format provided." = all(.stats %in% names(format)))
+    format <- format[.stats]
+  }
+
+  if (!extra_args[["fmt_afun"]] && is.null(format) && !is.null(format_col)) {
+    afun <- update_afun(.format_col = format_col, original_func = afun)
   }
 
   spl <- AnalyzeMultiVars(vars, var_labels,
