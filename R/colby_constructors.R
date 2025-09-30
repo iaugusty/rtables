@@ -1160,16 +1160,17 @@ analyze <- function(lyt,
     defrowlab <- var_labels
   }
 
-  .stats <- extra_args[[".stats"]]
-  if (!extra_args[["fmt_afun"]] && !is.null(format) && length(names(format))) {
-    stopifnot("All requested .stats must have a format provided." = all(.stats %in% names(format)))
-    format <- format[.stats]
-  }
-
-  if (!extra_args[["fmt_afun"]] && is.null(format) && !is.null(format_col)) {
-    afun <- update_afun(.format_col = format_col, original_func = afun)
-  }
-
+  if (!is.null(extra_args[["fmt_afun"]]) && is.logical(extra_args[["fmt_afun"]])) {
+    .stats <- extra_args[[".stats"]]
+    if ( !extra_args[["fmt_afun"]] && !is.null(format) && length(names(format))) {
+      stopifnot("All requested .stats must have a format provided." = all(.stats %in% names(format)))
+      format <- format[.stats]
+    }
+  
+    if (!extra_args[["fmt_afun"]] && is.null(format) && !is.null(format_col)) {
+      afun <- update_afun(.format_col = format_col, original_func = afun)
+    }
+}
   spl <- AnalyzeMultiVars(vars, var_labels,
     afun = afun,
     split_format = format,
