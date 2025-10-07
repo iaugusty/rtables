@@ -1160,16 +1160,18 @@ analyze <- function(lyt,
   }
 
   if (!is.null(extra_args[[".stats"]]) && !is.null(extra_args[[".formats"]]) &&
-         inherits(extra_args[[".formats"]], "no_auto_fmt")) {
-      # this will be applied 
-      no_auto_fmt <- no_auto_fmt_handler(extra_args,
-                                         format,
-                                         afun,
-                                         vars)
-      format <- no_auto_fmt$format
-      afun <- no_auto_fmt$afun
+    inherits(extra_args[[".formats"]], "no_auto_fmt")) {
+    # this will be applied
+    no_auto_fmt <- no_auto_fmt_handler(
+      extra_args,
+      format,
+      afun,
+      vars
+    )
+    format <- no_auto_fmt$format
+    afun <- no_auto_fmt$afun
   }
-  
+
   spl <- AnalyzeMultiVars(vars, var_labels,
     afun = afun,
     split_format = format,
