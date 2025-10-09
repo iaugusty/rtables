@@ -1713,7 +1713,7 @@ TableTree <- function(kids = list(),
                       trailing_section_div = NA_character_,
                       inset = 0L,
                       round_type = "iec") {
-  #round_type <- match.arg(round_type)
+  # round_type <- match.arg(round_type)
   check_ok_label(label)
   cinfo <- .calc_cinfo(cinfo, cont, kids)
 
@@ -1885,7 +1885,8 @@ setClass("PreDataTableLayouts",
     top_left = "character",
     header_section_div = "character",
     top_level_section_div = "character",
-    table_inset = "integer"
+    table_inset = "integer",
+    round_type = "character"
   )
 )
 
@@ -1898,7 +1899,9 @@ PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
                                 prov_footer = character(),
                                 header_section_div = NA_character_,
                                 top_level_section_div = NA_character_,
-                                table_inset = 0L) {
+                                table_inset = 0L,
+                                round_type = c("iec", "sas")) {
+  round_type <- match.arg(round_type)
   new("PreDataTableLayouts",
     row_layout = rlayout,
     col_layout = clayout,
@@ -1909,7 +1912,8 @@ PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
     provenance_footer = prov_footer,
     header_section_div = header_section_div,
     top_level_section_div = top_level_section_div,
-    table_inset = table_inset
+    table_inset = table_inset,
+    round_type = round_type
   )
 }
 

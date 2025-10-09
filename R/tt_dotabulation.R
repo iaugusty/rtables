@@ -1239,7 +1239,7 @@ build_table <- function(lyt, df,
                         col_total = if (is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
                         topleft = NULL,
                         hsep = default_hsep(),
-                        round_type = c("iec", "sas"),
+                        round_type = NULL,
                         ...) {
   if (!is(lyt, "PreDataTableLayouts")) {
     stop(
@@ -1248,8 +1248,10 @@ build_table <- function(lyt, df,
     )
   }
 
-  round_type <- match.arg(round_type)
-  
+  if (is.null(round_type)) {
+    round_type <- round_type(lyt)
+  }
+
   ## if no columns are defined (e.g. because lyt is NULL)
   ## add a single overall column as the "most basic"
   ## table column structure that makes sense
@@ -1359,6 +1361,7 @@ build_table <- function(lyt, df,
     main_footer(tab) <- main_footer(lyt)
     prov_footer(tab) <- prov_footer(lyt)
     header_section_div(tab) <- header_section_div(lyt)
+    round_type(tab) <- round_type
   } else {
     tab <- TableTree(
       cont = ctab,
@@ -1374,7 +1377,8 @@ build_table <- function(lyt, df,
       subtitles = subtitles(lyt),
       main_footer = main_footer(lyt),
       prov_footer = prov_footer(lyt),
-      header_section_div = header_section_div(lyt)
+      header_section_div = header_section_div(lyt),
+      round_type = round_type
     )
   }
 
@@ -1390,7 +1394,6 @@ build_table <- function(lyt, df,
   if (table_inset(lyt) > 0) {
     table_inset(tab) <- table_inset(lyt)
   }
-  round_type(tab) <- round_type
   tab
 }
 

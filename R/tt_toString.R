@@ -50,9 +50,8 @@ setMethod("toString", "VTableTree", function(x,
                                              max_width = NULL,
                                              fontspec = font_spec(),
                                              ttype_ok = FALSE,
-                                             round_type = NULL
-                                             ) {
-  if (is.null(round_type)){
+                                             round_type = NULL) {
+  if (is.null(round_type)) {
     round_type <- round_type(x)
   }
   toString(
@@ -211,8 +210,10 @@ setMethod(
            indent_size = 2,
            fontspec = NULL,
            col_gap = 3L,
-           round_type = c("iec", "sas")) {
-    round_type <- match.arg(round_type)
+           round_type = NULL) {
+    if (is.null(round_type)) {
+      round_type <- round_type(obj)
+    }
     stopifnot(is(obj, "VTableTree"))
     check_ccount_vis_ok(obj)
     header_content <- .tbl_header_mat(obj) # first col are for row.names
@@ -683,7 +684,10 @@ setGeneric(
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "TableTree",
-  function(obj, shell = FALSE, round_type = c("iec", "sas")) {
+  function(obj, shell = FALSE, round_type = NULL) {
+    if (is.null(round_type)) {
+      round_type <- round_type(obj)
+    }
     lr <- get_formatted_cells(tt_labelrow(obj), shell = shell, round_type = round_type)
 
     ct <- get_formatted_cells(content_table(obj), shell = shell, round_type = round_type)
@@ -702,7 +706,10 @@ setMethod(
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "ElementaryTable",
-  function(obj, shell = FALSE, round_type = c("iec", "sas")) {
+  function(obj, shell = FALSE, round_type = NULL) {
+    if (is.null(round_type)) {
+      round_type <- round_type(obj)
+    }
     lr <- get_formatted_cells(tt_labelrow(obj), shell = shell, round_type = round_type)
     els <- lapply(tree_children(obj), get_formatted_cells, shell = shell, round_type = round_type)
     do.call(rbind, c(list(lr), els))

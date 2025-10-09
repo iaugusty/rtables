@@ -4622,9 +4622,30 @@ setMethod(
   function(obj) lapply(obj, obj_stat_names)
 )
 
+#' @rdname int_methods
+#' @export
 setMethod("round_type", "VTableTree", function(obj) obj@round_type)
 
+#' @rdname int_methods
+#' @export
 setMethod("round_type<-", "VTableTree", function(obj, value) {
   obj@round_type <- value
   obj
 })
+
+#' @rdname int_methods
+#' @export
+setMethod("round_type", "PreDataTableLayouts", function(obj) obj@round_type)
+
+#' @rdname int_methods
+#' @export
+setMethod("round_type<-", "PreDataTableLayouts", function(obj, value) {
+  obj@round_type <- value
+  obj
+})
+
+#' @rdname int_methods
+setMethod("round_type", "TableRow", function(obj) NULL)
+
+#' @rdname int_methods
+setMethod("round_type<-", "TableRow", function(obj) obj)

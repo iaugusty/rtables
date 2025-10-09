@@ -2096,7 +2096,9 @@ basic_table <- function(title = "",
                         colcount_format = "(N=xx)",
                         header_section_div = NA_character_,
                         top_level_section_div = NA_character_,
-                        inset = 0L) {
+                        inset = 0L,
+                        round_type = c("iec", "sas")) {
+  round_type <- match.arg(round_type)
   inset <- as.integer(inset)
   if (is.na(inset) || inset < 0L) {
     stop("Got invalid table_inset value, must be an integer > 0")
@@ -2111,7 +2113,8 @@ basic_table <- function(title = "",
     prov_footer = prov_footer,
     header_section_div = header_section_div,
     top_level_section_div = top_level_section_div,
-    table_inset = as.integer(inset)
+    table_inset = as.integer(inset),
+    round_type = round_type
   )
 
   ## unconditional now, NA case is handled in cinfo construction
