@@ -11,7 +11,7 @@
   indent_size = 2,
   fontspec = NULL,
   col_gap = 3L,
-  round_type = c("iec", "sas")
+  round_type = NULL
 )
 }
 \arguments{
@@ -33,7 +33,9 @@ by \code{fontspec}) that should be placed between columns when the table
 is rendered directly to text (e.g., by \code{toString} or \code{export_as_txt}). Defaults
 to \code{3}.}
 
-\item{round_type}{(\code{"iec"} or \code{"sas"})\cr the type of rounding to perform. iec,
+\item{round_type}{(\code{NULL} or \code{"iec"} or \code{"sas"}) \cr
+When \code{NULL} the rounding type that has been set on the layout in \code{basic_table()} will be used.
+\cr Ohterwise, the type of rounding to perform. iec,
 the default, peforms rounding compliant with IEC 60559 (see details), while
 sas performs nearest-value rounding consistent with rounding within SAS.}
 }

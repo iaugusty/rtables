@@ -1161,6 +1161,11 @@ recursive_applysplit <- function(df,
 #'   "counts" for *all* leaf-columns if non-`NULL`. `NA` elements will be replaced with the automatically
 #'   calculated counts. Turns on display of leaf-column counts when non-`NULL`.
 #' @param col_total (`integer(1)`)\cr the total observations across all columns. Defaults to `nrow(df)`.
+#' @param round_type (`NULL` or `"iec"` or `"sas"`) \cr
+#' When `NULL` the rounding type that has been set on the layout in `basic_table()` will be used.
+#' \cr Ohterwise, the type of rounding to perform. iec,
+#'   the default, peforms rounding compliant with IEC 60559 (see details), while
+#'   sas performs nearest-value rounding consistent with rounding within SAS.
 #' @param ... ignored.
 #'
 #' @details

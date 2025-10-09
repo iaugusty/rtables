@@ -19,6 +19,12 @@ NULL
 #' @inheritParams gen_args
 #' @inherit formatters::toString
 #'
+#' @param round_type (`NULL` or `"iec"` or `"sas"`) \cr
+#' When `NULL` the rounding type that has been set on the `VTableTree` will be used.
+#' \cr Ohterwise, the type of rounding to perform. iec,
+#'   the default, peforms rounding compliant with IEC 60559 (see details), while
+#'   sas performs nearest-value rounding consistent with rounding within SAS.
+#'
 #' @return A string representation of `x` as it appears when printed.
 #'
 #' @examplesIf require(dplyr)
@@ -163,6 +169,12 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #'  is rendered directly to text (e.g., by `toString` or `export_as_txt`). Defaults
 #'  to `3`.
 #'
+#' @param round_type (`NULL` or `"iec"` or `"sas"`) \cr
+#' When `NULL` the rounding type that has been set on the layout in `basic_table()` will be used.
+#' \cr Ohterwise, the type of rounding to perform. iec,
+#'   the default, peforms rounding compliant with IEC 60559 (see details), while
+#'   sas performs nearest-value rounding consistent with rounding within SAS.
+#'   
 #' @details
 #' The strings in the return object are defined as follows: row labels are those determined by `make_row_df` and cell
 #' values are determined using `get_formatted_cells`. (Column labels are calculated using a non-exported internal
@@ -704,6 +716,11 @@ setMethod(
 )
 
 #' @rdname gfc
+#' @param round_type (`NULL` or `"iec"` or `"sas"`) \cr
+#' When `NULL` the rounding type that has been set on the `ElementaryTable` or `TableTree` will be used.
+#' \cr Ohterwise, the type of rounding to perform. iec,
+#'   the default, peforms rounding compliant with IEC 60559 (see details), while
+#'   sas performs nearest-value rounding consistent with rounding within SAS.
 setMethod(
   "get_formatted_cells", "ElementaryTable",
   function(obj, shell = FALSE, round_type = NULL) {

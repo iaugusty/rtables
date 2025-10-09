@@ -38,7 +38,12 @@ div_helper <- function(lst, class) {
 #'   to `FALSE`.
 #' @param expand_newlines (`flag`)\cr Defaults to `FALSE`, relying on `html` output to solve newline characters (`\n`).
 #'   Doing this keeps the structure of the cells but may depend on the output device.
-#'
+#' @param round_type (`NULL` or `"iec"` or `"sas"`) \cr
+#' When `NULL` the rounding type that has been set on the table in `build_table()` will be used.
+#' \cr Ohterwise, the type of rounding to perform. iec,
+#'   the default, peforms rounding compliant with IEC 60559 (see details), while
+#'   sas performs nearest-value rounding consistent with rounding within SAS.
+#'   
 #' @importFrom htmltools tags
 #'
 #' @return A `shiny.tag` object representing `x` in HTML.

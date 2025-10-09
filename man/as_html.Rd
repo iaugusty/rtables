@@ -44,6 +44,12 @@ to \code{FALSE}.}
 
 \item{expand_newlines}{(\code{flag})\cr Defaults to \code{FALSE}, relying on \code{html} output to solve newline characters (\verb{\\n}).
 Doing this keeps the structure of the cells but may depend on the output device.}
+
+\item{round_type}{(\code{NULL} or \code{"iec"} or \code{"sas"}) \cr
+When \code{NULL} the rounding type that has been set on the table in \code{build_table()} will be used.
+\cr Ohterwise, the type of rounding to perform. iec,
+the default, peforms rounding compliant with IEC 60559 (see details), while
+sas performs nearest-value rounding consistent with rounding within SAS.}
 }
 \value{
 A \code{shiny.tag} object representing \code{x} in HTML.

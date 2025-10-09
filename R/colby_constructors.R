@@ -2027,6 +2027,7 @@ list_wrap_df <- function(f) {
 #' Every layout must start with a basic table.
 #'
 #' @inheritParams constr_args
+#' @inheritParams gen_args
 #' @param show_colcounts (`logical(1)`)\cr Indicates whether the lowest level of
 #'   applied to data. `NA`, the default, indicates that the `show_colcounts`
 #'   argument(s) passed to the relevant calls to `split_cols_by*`

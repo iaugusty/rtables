@@ -47,7 +47,9 @@ calculating string widths and heights, as returned by \code{\link[formatters:fon
 allowed via \code{fontspec}. Defaults to \code{FALSE}. This parameter is primarily
 for internal testing and generally should not be set by end users.}
 
-\item{round_type}{(\code{"iec"} or \code{"sas"})\cr the type of rounding to perform. iec,
+\item{round_type}{(\code{NULL} or \code{"iec"} or \code{"sas"}) \cr
+When \code{NULL} the rounding type that has been set on the \code{VTableTree} will be used.
+\cr Ohterwise, the type of rounding to perform. iec,
 the default, peforms rounding compliant with IEC 60559 (see details), while
 sas performs nearest-value rounding consistent with rounding within SAS.}
 }

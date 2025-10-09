@@ -51,7 +51,9 @@ used again to create a \code{TableTree} object with \code{\link[=df_to_tt]{df_to
 \item{verbose}{(\code{flag})\cr when \code{TRUE}, the function will print additional information for
 \code{data_format != "full_precision"}.}
 
-\item{round_type}{(\code{"iec"} or \code{"sas"})\cr the type of rounding to perform. iec,
+\item{round_type}{(\code{NULL} or \code{"iec"} or \code{"sas"}) \cr
+When \code{NULL} the rounding type that has been set on \code{tt} will be used.
+\cr Ohterwise, the type of rounding to perform. iec,
 the default, peforms rounding compliant with IEC 60559 (see details), while
 sas performs nearest-value rounding consistent with rounding within SAS.}
 
