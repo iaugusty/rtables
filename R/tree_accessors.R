@@ -1226,12 +1226,24 @@ setMethod(
       if (!is.null(x) && (override || is.null(obj_format(x)))) {
         obj_format(x) <- obj_format(obj)
       }
+      # consider format "xx" the same as null and override with format
+      # only when format is of length 1 -- not when called from within VTableTree 
+      fmt_type <- format_spec_type(format)
+      if (!is.null(x) && !is.null(obj_format(x)) &&
+        !is.function(obj_format(x)) && obj_format(x) == "xx" &&
+        !is.null(format)  && length(format) == 1 && 
+        fmt_type != "format variable name" &&
+        !is.function(format) && format != "xx") {
+        obj_format(x) <- format
+      }
       if (!is.null(x) && (override || .no_na_str(x))) {
         obj_na_str(x) <- obj_na_str(obj)
       }
       x
     })
     row_values(obj) <- lvals
+    
+    #message(paste("format here : ", paste0(format, collapse = ",")))
     obj
   }
 )

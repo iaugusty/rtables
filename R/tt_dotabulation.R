@@ -418,13 +418,15 @@ gen_rowvalues <- function(dfpart,
   imods <- indent_mod(rv1col) ## rv1col@indent_mods
   unwrapped_vals <- lapply(rawvals, as, Class = "list", strict = TRUE)
 
-  formatvec <- NULL
-  if (!is.null(format)) {
-    if (is.function(format)) {
-      format <- list(format)
-    }
-    formatvec <- rep(format, length.out = ncrows)
-  }
+  # new approach to turn format into formatvec
+  formatvec <- get_formatvec(
+    format = format,
+    datcol = datcol,
+    dfpart = dfpart,
+    ncrows = ncrows,
+    nms = nms
+  )
+  # message(paste("formatvec here: ", paste( formatvec, collapse = ", ")))
 
   trows <- lapply(1:ncrows, function(i) {
     rowvals <- lapply(unwrapped_vals, function(colvals) {
