@@ -3,19 +3,12 @@
 \docType{data}
 \name{no_auto_fmt}
 \alias{no_auto_fmt}
-\alias{update_afun_no_auto}
 \title{toolkit for analyze with no auto formatting feature}
 \format{
 An object of class \code{no_auto_fmt} of length 0.
 }
 \usage{
 no_auto_fmt
-
-update_afun_no_auto(afun)
-}
-\arguments{
-\item{afun}{(\code{function})\cr analysis function. Must accept \code{x} or \code{df} as its first parameter. Can optionally take
-other parameters which will be populated by the tabulation framework. See Details in \code{\link[=analyze]{analyze()}}.}
 }
 \value{
 Various, but not described here.
