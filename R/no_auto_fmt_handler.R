@@ -98,7 +98,11 @@ get_formatvec <- function(format, datcol, dfpart, ncrows, nms) {
     if (!format %in% names(dfpart)) {
       stop("Format specification issue: Variable ", format, " is not present in input dataset df.")
     }
+    format_orig <- format
     format <- unlist(unique(dfpart[[format]]))
+    if (any(duplicated(names(format)))) {
+      stop("Format specification issue: Content of variable ", format_orig, " is not unique accross current facet.")
+    }
   }
 
   if (is.function(format)) {
