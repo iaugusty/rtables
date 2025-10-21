@@ -15,17 +15,53 @@ no_auto_fmt <- structure(list(), class = "no_auto_fmt")
 
 
 #' @noRd
+## Cases:
+## format spec - normal format specification: function or valid format label
+## null - NULL
+## - format variable name - variable name on input dataset, eg format = "fmt_col"
+## - list analysis variable name - list of variable names with their corresponding formatting specifications
+## eg format = list(AGE = c(n = "xx", mean = "xx.x", mean_sd = "xx.x (xx.xx)"),
+##                  WEIGHT = c(n = "xx", mean = "xx.xx", mean_sd = "xx.xx (xx.xxx)"),
+##                  default = c(n = "xx", mean = "xx.x", mean_sd = "xx.x (xx.xx)", count_fraction = "xx. (xx.x%)"))
+## - format spec - a standard format specification
+##   named vector: format = c(n = "xx", mean = "xx.x", mean_sd = "xx.x (xx.xx)")
+##   or unnamed character(1): format = "xx.x"
+##   include option for unnamed vector length > 1????????
+
+# examples
+# fmt1 <- list(AGE = c(n = "xx", mean = "xx.x"),
+#              default = c(n = "xx", mean = "xx.x", count_fraction = format_count_fraction_fixed_dp))
+# format_spec_type(fmt1)
+#
+# fmt2 <- c(n = "xx", mean = "xx.x", count_fraction = format_count_fraction_fixed_dp)
+# format_spec_type(fmt2)
+#
+# fmt3 <- c("fmt_col")
+# format_spec_type(fmt3)
+#
+# fmt3 <- c("xx.xxxxxxx")
+# format_spec_type(fmt3)
+#
+# fmt4 <- c("xx.x", "xx.xx")
+# format_spec_type(fmt4)
+#
+# fmt5 <- format_count_fraction_fixed_dp
+# format_spec_type(fmt5)
+#
+# fmt6 <- c("xx.x", "xx.xx", format_count_fraction_fixed_dp)
+# format_spec_type(fmt6)
+
 
 format_spec_type <- function(format) {
   if (is.null(format)) {
     type <- "null"
   } else if (length(format) == 1 && is.null(names(format))) {
-    if (is_valid_format(format) || is.function(format)) {
+    if (is_valid_format(format) || grepl("xx.", format, fixed = TRUE) || is.function(format)) {
       type <- "format spec"
     } else {
       type <- "format variable name"
     }
-  } else if (!is.list(format) || is.list(format) && any(sapply(format, is.function))) {
+  } else if (!is.list(format) || (is.list(format) && any(sapply(format, is.function)))) {
     type <- "format spec"
   } else if (is.list(format)) {
     type <- "list analysis variable name"
@@ -50,14 +86,12 @@ get_formatvec <- function(format, datcol, dfpart, ncrows, nms) {
     if (is.null(names(format))) {
       stop("when format is a list it should be a named list")
     }
-
-    if (!(datcol %in% names(format)) && !("default" %in% names(format))) {
-      stop(paste("No format specification found for variable: ", datcol))
-    }
-
-    format_datcol <- datcol
-    if (!(datcol %in% names(format)) && "default" %in% names(format)) {
+    if (datcol %in% names(format)) {
+      format_datcol <- datcol
+    } else if ("default" %in% names(format)) {
       format_datcol <- "default"
+    } else {
+      stop(paste("No format specification found for variable: ", datcol))
     }
     format <- format[[format_datcol]]
   } else if (fmt_spec_type == "format variable name") {
@@ -71,19 +105,28 @@ get_formatvec <- function(format, datcol, dfpart, ncrows, nms) {
     format <- list(format)
   }
   if (is.null(names(format))) {
+    ### original rtables behavior
     formatvec <- rep(format, length.out = ncrows)
   } else {
+    ### new behavior: input format is named
     ### KEY assumption: names of the rows from verticalsection start with the name of the statistic, (possibly followed with ".")
     ### method will not work when not all columns are from the same statistics (eg relative risk column)
     ###
     if (!is.null(names(nms))) nms <- names(nms)
     nmf <- sub("\\..*", "", nms)
-    xx <- match(nmf, names(format))
-    if (any(is.na(xx))) {
-      nf <- unique(which(is.na(xx)))
-      stop(paste("No format provided for statistic(s): "), paste(nmf[nf], collapse = ","))
+
+    not_in_fmt <- setdiff(nmf, names(format))
+    if (length(not_in_fmt) > 0) {
+      # proceed with unformatted presentation ("xx")
+      not_in_fmt2 <- rep("xx", length(not_in_fmt))
+      names(not_in_fmt2) <- not_in_fmt
+      format_ext <- c(format, not_in_fmt2)
+      # message(paste("No format provided for statistic(s): "), paste(not_in_fmt, collapse = ", "))
+    } else {
+      format_ext <- format
     }
-    formatvec <- format[xx]
+    xx <- match(nmf, names(format_ext))
+    formatvec <- format_ext[xx]
   }
 
   if (!is.null(formatvec)) {
@@ -94,140 +137,4 @@ get_formatvec <- function(format, datcol, dfpart, ncrows, nms) {
     }
   }
   formatvec
-}
-
-
-
-### look into match_extra_args in tt_dotabulation
-# taken from tern
-extra_afun_params <- list(
-  .N_col = integer(),
-  .N_total = integer(),
-  .N_row = integer(),
-  .df_row = data.frame(),
-  .var = character(),
-  .ref_group = character(),
-  .ref_full = vector(mode = "numeric"),
-  .in_ref_col = logical(),
-  .spl_context = data.frame(),
-  .all_col_exprs = vector(mode = "expression"),
-  .all_col_counts = vector(mode = "integer")
-)
-
-
-#' @noRd
-#' @param extra_afun_params (`list`)\cr list of additional parameters (`character`) to be
-#'   retrieved from the environment. Curated list is present in [rtables::additional_fun_params].
-#' #@rdname no_auto_fmt
-#' #@order 14
-#' #@keywords internal
-
-# taken from tern - except from restricting to non-symbolics only
-# this is to cover cases where .ref_group is not defined, then it is a symbolic
-
-retrieve_extra_afun_params <- function(extra_afun_params) {
-  envir <- parent.frame()
-  symbolics <- sapply(extra_afun_params, function(x) {
-    typeof(envir[[x]]) %in% c("language", "symbol")
-  })
-  extra_afun_params <- extra_afun_params[!symbolics]
-
-  out <- list()
-  for (extra_param in extra_afun_params) {
-    out <- c(out, list(get(extra_param, envir = envir)))
-  }
-
-  setNames(out, extra_afun_params)
-}
-
-#' @noRd
-#' @inheritParams gen_args
-#' @inheritParams lyt_args
-#' @order 15
-#' @keywords internal
-#' #@rdname no_auto_fmt
-#'
-afun_ext_add_fun_params <- function(afun) {
-  extended_func <- afun
-  if (".spl_context" %in% names(formals(afun))) {
-    extended_func <- afun
-  } else {
-    formals(extended_func) <- c(formals(afun), extra_afun_params)
-  }
-  # return this function
-  extended_func
-}
-
-
-
-
-#' @inheritParams gen_args
-#' @inheritParams lyt_args
-#' @order 2
-#' @rdname no_auto_fmt
-#'
-#' @export
-update_afun_no_auto <- function(afun) {
-  # update afun (only in some cases)
-  updated_afun1 <- afun_ext_add_fun_params(afun)
-  # note that function updated_afun1 will be used in the call inside corepartall
-
-  # corepartall body code to avoid using the same code in 2 blocks
-  # this part of code deals with updating .formats in each facet
-  corepartall <- quote({
-    .additional_fun_parameters <- retrieve_extra_afun_params(names(extra_afun_params))
-
-    # Get original arguments --- critical here is envir parent.frame(3)
-    first_arg <- get("dat", envir = parent.frame(3))
-
-    # .additional_fun_parameters is passed twice in order to work with tern functions
-    # this is in order to properly execute following step in tern afuns
-    # extra_afun_params <- retrieve_extra_afun_params(
-    # names(dots_extra_args$.additional_fun_parameters)
-    # )
-    args <- c(
-      list(first_arg, ..., ".additional_fun_parameters" = .additional_fun_parameters),
-      .additional_fun_parameters
-    )
-
-    # Call afun (updated version)
-    result <- do.call(updated_afun1, args)
-    result
-  })
-
-  if (.takes_df(afun)) {
-    # first argument is df
-    updated_afun <- function(df, ...,
-                             .N_col,
-                             .N_total,
-                             .N_row,
-                             .df_row,
-                             .var,
-                             .ref_group,
-                             .ref_full,
-                             .in_ref_col,
-                             .spl_context,
-                             .all_col_exprs,
-                             .all_col_counts) {
-      eval(corepartall)
-    }
-  } else {
-    # first arg is x
-    updated_afun <- function(x, ...,
-                             .N_col,
-                             .N_total,
-                             .N_row,
-                             .df_row,
-                             .var,
-                             .ref_group,
-                             .ref_full,
-                             .in_ref_col,
-                             .spl_context,
-                             .all_col_exprs,
-                             .all_col_counts) {
-      eval(corepartall)
-    }
-  }
-  # return this function
-  return(updated_afun)
 }

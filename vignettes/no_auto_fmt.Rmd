@@ -30,6 +30,7 @@ knitr::opts_chunk$set(comment = "#")
 This vignette is based upon a version of `rtables` and `tern` that is not yet released. See here installation instructions for both packages.
 
 ```{r, echo=FALSE, eval=FALSE}
+devtools::install_github(repo = "iaugusty/formatters", ref = "new_format", force = TRUE, upgrade = "never")
 devtools::install_github(repo = "iaugusty/rtables", ref = "no_auto_fmt_alternative2", force = TRUE, upgrade = "never")
 devtools::install_github(repo = "iaugusty/tern", ref = "no_auto_fmt_alternative", force = TRUE, upgrade = "never")
 ```
@@ -422,42 +423,6 @@ tbl6b <- build_table(lyt6b, ex_advs2, ex_adsl)
 tbl6b
 ```
 
-
-A solution to that is to apply the new `update_afun_no_auto` function to the underlying `tern` `afun`, and to utilize that updated function in the `analyze` call.
-```{r, message=TRUE}
-myafun <- update_afun_no_auto(tern:::a_ancova)
-
-
-lyt6c <- basic_table() %>%
-  split_cols_by("ARMCD", ref_group = "ARM A") %>%
-  split_rows_by("PARAMCD", split_fun = drop_split_levels) %>%
-  analyze(
-    vars = "AVAL",
-    afun = a_summary,
-    table_names = "SUMMARY",
-    var_labels = "My label- summary",
-    extra_args = list(
-      .stats = c("n", "mean", "range")
-    )
-  ) %>%
-  analyze(
-    vars = "AVAL",
-    afun = myafun,
-    table_names = "ANCOVA",
-    var_labels = "My label- ANCOVA",
-    extra_args = list(
-      variables = list(arm = "ARMCD", covariates = "SEX"),
-      conf_level = 0.95,
-      .stats = c("n", "lsmean"),
-      .formats = no_auto_fmt
-    ),
-    format = "fmt_col"
-  )
-
-tbl6c <- build_table(lyt6c, ex_advs2, ex_adsl)
-tbl6c
-```
-
 #### background for tern afuns 
 
 As indicated earlier, it is not possible to directly utilize `tern` afuns that take `df` as the first argument inside an `analyze` call.
@@ -465,12 +430,6 @@ As indicated earlier, it is not possible to directly utilize `tern` afuns that t
 The reason for this is how the afuns are being defined. The specialized arguments (see `?additional_fun_params`) are not named in formals, and go anonymously into `...` instead. Due to this reason, the splitting machinery cannnot be applied directly to these afuns.
 
 Inside the corresponding **analyze function** (eg `summarize_ancova` corresponds to afun `tern:::a_ancova`), the underlying `afun` is updated in order to retrieve the facet values for these specialized arguments.
-
-A similar technique has been used in the new `update_afun_no_auto` function.
-This updater function is not being used in the solution to utilize format inside `analyze()` calls.
-
-This technique of updating `afun` function has an impact on debugging methods. See next section.
-
 
 ## special situation: override format from within afun with value from analyze format
 
@@ -484,13 +443,12 @@ lyt11a <- basic_table() %>%
     afun = a_summary,
     extra_args = list(
       .stats = c("n", "mean", "range", "mean_se"),
-      .formats = c(n = "xx", mean = "xx", mean_se = "xx")
+      .formats = c(n = "xx", mean = "xx", mean_se = "none")
     )
   )
 
 tbl11a <- build_table(lyt11a, ex_adsl)
 tbl11a
-
 ```
 
 ```{r, message=TRUE}
@@ -501,14 +459,13 @@ lyt12a <- basic_table() %>%
     afun = a_summary,
     extra_args = list(
       .stats = c("n", "mean", "range", "mean_se"),
-      .formats = c(n = "xx", mean = "xx", mean_se = "xx")
+      .formats = c(n = "xx", mean = "xx", mean_se = "none")
     ),
-    format = c(n = "xx", mean = "xx.xxx", range = "xx.xx - xx.xx", mean_se = "xx.x (xx.x)")
+    format = c(mean = "xx.xxx", mean_se = "xx.x (xx.x)")
   )
 
 tbl12a <- build_table(lyt12a, ex_adsl)
 tbl12a
-
 ```
 
 

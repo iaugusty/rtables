@@ -1205,6 +1205,20 @@ setGeneric("set_format_recursive", function(obj, format, na_str, override = FALS
   standardGeneric("set_format_recursive")
 })
 
+#' @noRd
+check_for_char_format <- function(format,
+                                  against = "xx",
+                                  equal = TRUE,
+                                  check_len = TRUE) {
+  if (is.null(format) || is.function(format) || (check_len && length(format) != 1)) {
+    FALSE
+  } else if (equal) {
+    format == against
+  } else {
+    format != against
+  }
+}
+
 #' @param override (`flag`)\cr whether to override attribute.
 #'
 #' @rdname int_methods
@@ -1227,13 +1241,13 @@ setMethod(
         obj_format(x) <- obj_format(obj)
       }
       # consider format "xx" the same as null and override with format
-      # only when format is of length 1 -- not when called from within VTableTree 
+      # only when format is of length 1 -- not when called from within VTableTree
       fmt_type <- format_spec_type(format)
-      if (!is.null(x) && !is.null(obj_format(x)) &&
-        !is.function(obj_format(x)) && obj_format(x) == "xx" &&
-        !is.null(format)  && length(format) == 1 && 
-        fmt_type != "format variable name" &&
-        !is.function(format) && format != "xx") {
+      if (!is.null(x) &&
+        fmt_type == "format spec" &&
+        check_for_char_format(obj_format(x), "none", equal = TRUE) &&
+        check_for_char_format(format, "none", equal = FALSE)
+      ) {
         obj_format(x) <- format
       }
       if (!is.null(x) && (override || .no_na_str(x))) {
@@ -1242,8 +1256,7 @@ setMethod(
       x
     })
     row_values(obj) <- lvals
-    
-    #message(paste("format here : ", paste0(format, collapse = ",")))
+
     obj
   }
 )
