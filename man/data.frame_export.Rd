@@ -16,7 +16,7 @@ as_result_df(
   add_tbl_name_split = FALSE,
   simplify = FALSE,
   verbose = FALSE,
-  round_type = NULL,
+  round_type = obj_round_type(tt),
   ...
 )
 
@@ -51,11 +51,8 @@ used again to create a \code{TableTree} object with \code{\link[=df_to_tt]{df_to
 \item{verbose}{(\code{flag})\cr when \code{TRUE}, the function will print additional information for
 \code{data_format != "full_precision"}.}
 
-\item{round_type}{(\code{NULL} or \code{"iec"} or \code{"sas"}) \cr
-When \code{NULL} the rounding type that has been set on \code{tt} will be used.
-\cr Ohterwise, the type of rounding to perform. iec,
-the default, peforms rounding compliant with IEC 60559 (see details), while
-sas performs nearest-value rounding consistent with rounding within SAS.}
+\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 
 \item{...}{additional arguments passed to spec-specific result data frame function (\code{spec}). When
 using \code{make_ard = TRUE}, it is possible to turn off the extraction of the exact string decimals

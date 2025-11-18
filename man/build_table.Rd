@@ -12,7 +12,8 @@ build_table(
   col_total = if (is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
   topleft = NULL,
   hsep = default_hsep(),
-  round_type = NULL,
+  round_type = if (is(lyt, "PreDataTableLayouts")) obj_round_type(lyt) else
+    valid_round_type,
   ...
 )
 }
@@ -38,11 +39,8 @@ the table when rendered as text. Defaults to a connected horizontal line (unicod
 charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
 information.}
 
-\item{round_type}{(\code{NULL} or \code{"iec"} or \code{"sas"}) \cr
-When \code{NULL} the rounding type that has been set on the layout in \code{basic_table()} will be used.
-\cr Ohterwise, the type of rounding to perform. iec,
-the default, peforms rounding compliant with IEC 60559 (see details), while
-sas performs nearest-value rounding consistent with rounding within SAS.}
+\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 
 \item{...}{ignored.}
 }

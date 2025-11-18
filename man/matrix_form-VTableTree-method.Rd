@@ -11,7 +11,7 @@
   indent_size = 2,
   fontspec = NULL,
   col_gap = 3L,
-  round_type = NULL
+  round_type = obj_round_type(obj)
 )
 }
 \arguments{
@@ -33,11 +33,8 @@ by \code{fontspec}) that should be placed between columns when the table
 is rendered directly to text (e.g., by \code{toString} or \code{export_as_txt}). Defaults
 to \code{3}.}
 
-\item{round_type}{(\code{NULL} or \code{"iec"} or \code{"sas"}) \cr
-When \code{NULL} the rounding type that has been set on the layout in \code{basic_table()} will be used.
-\cr Ohterwise, the type of rounding to perform. iec,
-the default, peforms rounding compliant with IEC 60559 (see details), while
-sas performs nearest-value rounding consistent with rounding within SAS.}
+\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 }
 \value{
 A list with the following elements:
@@ -62,7 +59,7 @@ values are determined using \code{get_formatted_cells}. (Column labels are calcu
 function.
 }
 \examples{
-\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%

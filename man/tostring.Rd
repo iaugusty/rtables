@@ -15,7 +15,7 @@
   max_width = NULL,
   fontspec = font_spec(),
   ttype_ok = FALSE,
-  round_type = NULL
+  round_type = obj_round_type(x)
 )
 }
 \arguments{
@@ -47,11 +47,12 @@ calculating string widths and heights, as returned by \code{\link[formatters:fon
 allowed via \code{fontspec}. Defaults to \code{FALSE}. This parameter is primarily
 for internal testing and generally should not be set by end users.}
 
-\item{round_type}{(\code{NULL} or \code{"iec"} or \code{"sas"}) \cr
-When \code{NULL} the rounding type that has been set on the \code{VTableTree} will be used.
-\cr Ohterwise, the type of rounding to perform. iec,
+\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform. iec,
 the default, peforms rounding compliant with IEC 60559 (see details), while
-sas performs nearest-value rounding consistent with rounding within SAS.}
+sas performs nearest-value rounding consistent with rounding within SAS.\cr
+When \code{"sas"} or \code{"iec_mod"} rounding of a negative number that rounds to zero will be presented as 0
+(with the appropriate number of trailing zeros),
+while for \code{iec}, it will be presented as -0 (with the appropriate number of trailing zeros).}
 }
 \value{
 A string representation of \code{x} as it appears when printed.
@@ -71,7 +72,7 @@ undefined wrapping behavior. Passing vectors of already split strings remains su
 case each string is word-wrapped separately with the behavior described above.
 }
 \examples{
-\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%

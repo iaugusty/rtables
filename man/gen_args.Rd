@@ -30,7 +30,7 @@ gen_args(
   inset,
   table_inset,
   tt_type = c("any", "row", "table", "elemtable"),
-  round_type = c("iec", "sas"),
+  round_type = valid_round_type,
   ...
 )
 }
@@ -104,9 +104,8 @@ wild-card path but resolve to an individual row will not be considered matching.
 The value "elemtable" indicates an Elementary table, i.e., one representing a
 single variable within an \code{analyze} call.}
 
-\item{round_type}{(\code{"iec"} or \code{"sas"})\cr the type of rounding to perform. iec,
-the default, peforms rounding compliant with IEC 60559 (see details), while
-sas performs nearest-value rounding consistent with rounding within SAS.}
+\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 
 \item{...}{additional parameters passed to methods or tabulation functions.}
 }
