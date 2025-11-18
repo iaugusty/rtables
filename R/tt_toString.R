@@ -19,12 +19,6 @@ NULL
 #' @inheritParams gen_args
 #' @inherit formatters::toString
 #'
-#' @param round_type (`NULL` or `"iec"` or `"sas"`) \cr
-#' When `NULL` the rounding type that has been set on the `VTableTree` will be used.
-#' \cr Ohterwise, the type of rounding to perform. iec,
-#'   the default, peforms rounding compliant with IEC 60559 (see details), while
-#'   sas performs nearest-value rounding consistent with rounding within SAS.
-#'
 #' @return A string representation of `x` as it appears when printed.
 #'
 #' @examplesIf require(dplyr)
@@ -56,10 +50,7 @@ setMethod("toString", "VTableTree", function(x,
                                              max_width = NULL,
                                              fontspec = font_spec(),
                                              ttype_ok = FALSE,
-                                             round_type = NULL) {
-  if (is.null(round_type)) {
-    round_type <- round_type(x)
-  }
+                                             round_type = obj_round_type(x)) {
   toString(
     matrix_form(x,
       indent_rownames = TRUE,
@@ -169,12 +160,6 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #'  is rendered directly to text (e.g., by `toString` or `export_as_txt`). Defaults
 #'  to `3`.
 #'
-#' @param round_type (`NULL` or `"iec"` or `"sas"`) \cr
-#' When `NULL` the rounding type that has been set on the layout in `basic_table()` will be used.
-#' \cr Ohterwise, the type of rounding to perform. iec,
-#'   the default, peforms rounding compliant with IEC 60559 (see details), while
-#'   sas performs nearest-value rounding consistent with rounding within SAS.
-#'   
 #' @details
 #' The strings in the return object are defined as follows: row labels are those determined by `make_row_df` and cell
 #' values are determined using `get_formatted_cells`. (Column labels are calculated using a non-exported internal
@@ -222,10 +207,7 @@ setMethod(
            indent_size = 2,
            fontspec = NULL,
            col_gap = 3L,
-           round_type = NULL) {
-    if (is.null(round_type)) {
-      round_type <- round_type(obj)
-    }
+           round_type = obj_round_type(obj)) {
     stopifnot(is(obj, "VTableTree"))
     check_ccount_vis_ok(obj)
     header_content <- .tbl_header_mat(obj) # first col are for row.names
@@ -690,16 +672,13 @@ get_formatted_fnotes <- function(tt) {
 #' @rdname gfc
 setGeneric(
   "get_formatted_cells",
-  function(obj, shell = FALSE, round_type = c("iec", "sas")) standardGeneric("get_formatted_cells")
+  function(obj, shell = FALSE, round_type = valid_round_type) standardGeneric("get_formatted_cells")
 )
 
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "TableTree",
-  function(obj, shell = FALSE, round_type = NULL) {
-    if (is.null(round_type)) {
-      round_type <- round_type(obj)
-    }
+  function(obj, shell = FALSE, round_type = obj_round_type(obj)) {
     lr <- get_formatted_cells(tt_labelrow(obj), shell = shell, round_type = round_type)
 
     ct <- get_formatted_cells(content_table(obj), shell = shell, round_type = round_type)
@@ -716,17 +695,9 @@ setMethod(
 )
 
 #' @rdname gfc
-#' @param round_type (`NULL` or `"iec"` or `"sas"`) \cr
-#' When `NULL` the rounding type that has been set on the `ElementaryTable` or `TableTree` will be used.
-#' \cr Ohterwise, the type of rounding to perform. iec,
-#'   the default, peforms rounding compliant with IEC 60559 (see details), while
-#'   sas performs nearest-value rounding consistent with rounding within SAS.
 setMethod(
   "get_formatted_cells", "ElementaryTable",
-  function(obj, shell = FALSE, round_type = NULL) {
-    if (is.null(round_type)) {
-      round_type <- round_type(obj)
-    }
+  function(obj, shell = FALSE, round_type = obj_round_type(obj)) {
     lr <- get_formatted_cells(tt_labelrow(obj), shell = shell, round_type = round_type)
     els <- lapply(tree_children(obj), get_formatted_cells, shell = shell, round_type = round_type)
     do.call(rbind, c(list(lr), els))
@@ -736,7 +707,8 @@ setMethod(
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "TableRow",
-  function(obj, shell = FALSE, round_type = c("iec", "sas")) {
+  function(obj, shell = FALSE, round_type = valid_round_type) {
+    round_type <- match.arg(round_type)
     # Parent row format and na_str
     pr_row_format <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
     pr_row_na_str <- obj_na_str(obj) %||% "NA"
@@ -765,7 +737,8 @@ setMethod(
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "LabelRow",
-  function(obj, shell = FALSE, round_type = c("iec", "sas")) {
+  function(obj, shell = FALSE, round_type = valid_round_type) {
+    round_type <- match.arg(round_type)
     nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
     vstr <- if (shell) "-" else ""
     if (labelrow_visible(obj)) {

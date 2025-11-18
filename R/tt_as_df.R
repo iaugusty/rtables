@@ -25,11 +25,6 @@
 #' @param ... additional arguments passed to spec-specific result data frame function (`spec`). When
 #'   using `make_ard = TRUE`, it is possible to turn off the extraction of the exact string decimals
 #'   printed by the table with `add_tbl_str_decimals = FALSE`.
-#' @param round_type (`NULL` or `"iec"` or `"sas"`) \cr
-#' When `NULL` the rounding type that has been set on `tt` will be used.
-#' \cr Ohterwise, the type of rounding to perform. iec,
-#'   the default, peforms rounding compliant with IEC 60559 (see details), while
-#'   sas performs nearest-value rounding consistent with rounding within SAS.
 #'
 #' @return
 #' * `as_result_df` returns a result `data.frame`.
@@ -63,7 +58,7 @@ as_result_df <- function(tt, spec = NULL,
                          add_tbl_name_split = FALSE,
                          simplify = FALSE,
                          verbose = FALSE,
-                         round_type = NULL,
+                         round_type = obj_round_type(tt),
                          ...) {
   data_format <- data_format[[1]]
   checkmate::assert_class(tt, "VTableTree")
@@ -76,10 +71,6 @@ as_result_df <- function(tt, spec = NULL,
   checkmate::assert_flag(add_tbl_name_split)
   checkmate::assert_flag(verbose)
 
-  if (is.null(round_type)) {
-    round_type <- round_type(tt)
-  }
-  
   if (nrow(tt) == 0) {
     return(sanitize_table_struct(tt))
   }

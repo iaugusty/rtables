@@ -3,7 +3,7 @@
 #' This is a wrapper for [formatters::format_value()] for use with `CellValue` objects
 #'
 #' @inheritParams lyt_args
-#' @inheritParams formatters::format_value
+#' @inheritParams gen_args
 #' @param x (`CellValue` or `ANY`)\cr an object of class `CellValue`, or a raw value.
 #' @param format (`string` or `function`)\cr the format label or formatter function to
 #'   apply to `x`.
@@ -33,8 +33,9 @@ format_rcell <- function(x, format,
                          na_str = obj_na_str(x) %||% "NA",
                          pr_row_format = NULL,
                          pr_row_na_str = NULL,
-                         round_type = c("iec", "sas"),
+                         round_type = valid_round_type,
                          shell = FALSE) {
+  round_type <- match.arg(round_type)
   # Check for format and parent row format
   format <- if (missing(format)) obj_format(x) else format
   if (is.null(format) && !is.null(pr_row_format)) {

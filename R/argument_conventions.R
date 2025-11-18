@@ -47,10 +47,10 @@
 #'   wild-card path but resolve to an individual row will not be considered matching.
 #'   The value "elemtable" indicates an Elementary table, i.e., one representing a
 #'   single variable within an `analyze` call.
-#' @param round_type (`"iec"` or `"sas"`)\cr the type of rounding to perform. iec,
-#'   the default, peforms rounding compliant with IEC 60559 (see details), while
-#'   sas performs nearest-value rounding consistent with rounding within SAS.
-#' 
+#' @param round_type (`"iec"`, `"iec_mod"` or `"sas"`)\cr the type of rounding to perform.
+#' See [formatters::format_value()] for details.
+#'
+#'
 #' @return No return value.
 #'
 #' @family conventions
@@ -60,7 +60,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
                      value, object, path, label, label_pos, # visible_label,
                      cvar, topleft, page_prefix, hsep, indent_size, section_div, na_str, inset,
                      table_inset, tt_type = c("any", "row", "table", "elemtable"),
-                     round_type = c("iec", "sas"),
+                     round_type = valid_round_type,
                      ...) {
   NULL
 }

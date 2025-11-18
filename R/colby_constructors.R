@@ -2098,7 +2098,7 @@ basic_table <- function(title = "",
                         header_section_div = NA_character_,
                         top_level_section_div = NA_character_,
                         inset = 0L,
-                        round_type = c("iec", "sas")) {
+                        round_type = valid_round_type) {
   round_type <- match.arg(round_type)
   inset <- as.integer(inset)
   if (is.na(inset) || inset < 0L) {

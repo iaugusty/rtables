@@ -1609,7 +1609,8 @@ ElementaryTable <- function(kids = list(),
                             hsep = default_hsep(),
                             trailing_section_div = NA_character_,
                             inset = 0L,
-                            round_type = "iec") {
+                            round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   check_ok_label(label)
   if (is.null(cinfo)) {
     if (length(kids) > 0) {
@@ -1712,8 +1713,8 @@ TableTree <- function(kids = list(),
                       header_section_div = NA_character_,
                       trailing_section_div = NA_character_,
                       inset = 0L,
-                      round_type = "iec") {
-  # round_type <- match.arg(round_type)
+                      round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   check_ok_label(label)
   cinfo <- .calc_cinfo(cinfo, cont, kids)
 
@@ -1900,7 +1901,7 @@ PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
                                 header_section_div = NA_character_,
                                 top_level_section_div = NA_character_,
                                 table_inset = 0L,
-                                round_type = c("iec", "sas")) {
+                                round_type = valid_round_type) {
   round_type <- match.arg(round_type)
   new("PreDataTableLayouts",
     row_layout = rlayout,

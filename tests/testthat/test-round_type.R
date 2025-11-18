@@ -53,18 +53,24 @@ test_that("round_type can be set on basic_table", {
     build_table(adsl)
 
   expect_identical(
-    round_type(tbl_sas),
+    obj_round_type(tbl_sas),
     "sas"
   )
 
   # rounding method can be changed without the need to rebuild the table
   tbl_iec <- tbl_sas
-  round_type(tbl_iec) <- "iec"
+  obj_round_type(tbl_iec) <- "iec"
 
   expect_identical(
-    round_type(tbl_iec),
+    obj_round_type(tbl_iec),
     "iec"
   )
+  
+  # rounding method can be changed without the need to rebuild the table
+  tbl_fake <- tbl_sas
+  expect_error(obj_round_type(tbl_fake) <- "fake")
+  
+  
 
 
   # actual formatted values are as required
@@ -126,7 +132,7 @@ test_that("toString method works correclty with user defined round_type", {
 
   # round type can be modified without re-building table
   tbl_iec2 <- tbl_sas
-  round_type(tbl_iec2) <- "iec"
+  obj_round_type(tbl_iec2) <- "iec"
 
 
   colheader <- c("ARM A", "ARM B", "ARM C")
@@ -152,12 +158,12 @@ test_that("toString method works correclty with user defined round_type", {
   )
 
   expect_identical(
-    round_type(tbl_iec),
+    obj_round_type(tbl_iec),
     "iec"
   )
 
   expect_identical(
-    round_type(tbl_sas),
+    obj_round_type(tbl_sas),
     "sas"
   )
 
@@ -165,7 +171,7 @@ test_that("toString method works correclty with user defined round_type", {
   # round_type is maintained when subtable from ElementaryTable (select 2 columns)
   sub_tbl_sas <- tbl_sas[, c(1, 2)]
   expect_identical(
-    round_type(sub_tbl_sas),
+    obj_round_type(sub_tbl_sas),
     "sas"
   )
 
@@ -252,13 +258,13 @@ test_that("round_type still available on subtable", {
 
   sub_tbl <- tbl_sas[c("SEX", "F"), ]
   expect_identical(
-    round_type(sub_tbl),
+    obj_round_type(sub_tbl),
     "sas"
   )
 
   sub_tbl_iec <- tbl_iec[c("SEX", "F"), ]
   expect_identical(
-    round_type(sub_tbl_iec),
+    obj_round_type(sub_tbl_iec),
     "iec"
   )
 })
@@ -397,13 +403,13 @@ test_that("test for round_type and tt_at_path", {
     build_table(adsl)
 
   expect_identical(
-    round_type(tbl_sas),
+    obj_round_type(tbl_sas),
     "sas"
   )
 
   sub_tbl <- tt_at_path(tbl_sas, path = c("SEX", "F"))
   expect_identical(
-    round_type(sub_tbl),
+    obj_round_type(sub_tbl),
     "sas"
   )
 })

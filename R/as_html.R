@@ -22,6 +22,7 @@ div_helper <- function(lst, class) {
 #'
 #' The returned HTML object can be immediately used in `shiny` and `rmarkdown`.
 #'
+#' @inheritParams gen_args
 #' @param x (`VTableTree`)\cr a `TableTree` object.
 #' @param class_table (`character`)\cr class for `table` tag.
 #' @param class_tr (`character`)\cr class for `tr` tag.
@@ -38,12 +39,7 @@ div_helper <- function(lst, class) {
 #'   to `FALSE`.
 #' @param expand_newlines (`flag`)\cr Defaults to `FALSE`, relying on `html` output to solve newline characters (`\n`).
 #'   Doing this keeps the structure of the cells but may depend on the output device.
-#' @param round_type (`NULL` or `"iec"` or `"sas"`) \cr
-#' When `NULL` the rounding type that has been set on the table in `build_table()` will be used.
-#' \cr Ohterwise, the type of rounding to perform. iec,
-#'   the default, peforms rounding compliant with IEC 60559 (see details), while
-#'   sas performs nearest-value rounding consistent with rounding within SAS.
-#'   
+#'
 #' @importFrom htmltools tags
 #'
 #' @return A `shiny.tag` object representing `x` in HTML.
@@ -78,17 +74,13 @@ as_html <- function(x,
                     header_sep_line = TRUE,
                     no_spaces_between_cells = FALSE,
                     expand_newlines = FALSE,
-                    round_type = NULL) {
+                    round_type = if (is(x, "VTableTree")) obj_round_type(x) else valid_round_type) {
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
 
   stopifnot(is(x, "VTableTree"))
-  
-  if (is.null(round_type)) {
-    round_type <- round_type(x)
-  }
-  
+
   mat <- matrix_form(x, indent_rownames = TRUE, expand_newlines = expand_newlines, round_type = round_type)
 
   nlh <- mf_nlheader(mat)

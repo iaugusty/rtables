@@ -309,7 +309,8 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #' @family compatibility
 #' @export
 rtable <- function(header, ..., format = NULL, hsep = default_hsep(),
-                   inset = 0L) {
+                   inset = 0L, round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   if (is.character(header)) {
     header <- .char_to_hrows(header)
   } # list(rrowl(NULL, header))
@@ -342,7 +343,7 @@ rtable <- function(header, ..., format = NULL, hsep = default_hsep(),
   TableTree(
     kids = body, format = format, cinfo = colinfo,
     labelrow = LabelRow(lev = 0L, label = "", vis = FALSE),
-    hsep = hsep, inset = inset
+    hsep = hsep, inset = inset, round_type = round_type
   )
 }
 
