@@ -360,10 +360,6 @@
 \alias{obj_stat_names<-,CellValue-method}
 \alias{obj_stat_names,CellValue-method}
 \alias{obj_stat_names,RowsVerticalSection-method}
-\alias{obj_round_type,VTableTree-method}
-\alias{obj_round_type<-,VTableTree-method}
-\alias{obj_round_type,PreDataTableLayouts-method}
-\alias{obj_round_type<-,PreDataTableLayouts-method}
 \alias{rbind2,VTableNodeInfo,missing-method}
 \alias{tt_at_path,VTableTree-method}
 \alias{tt_at_path<-,VTableTree,ANY,VTableTree-method}
@@ -1149,14 +1145,6 @@ obj_stat_names(obj) <- value
 \S4method{obj_stat_names}{CellValue}(obj)
 
 \S4method{obj_stat_names}{RowsVerticalSection}(obj)
-
-\S4method{obj_round_type}{VTableTree}(obj)
-
-\S4method{obj_round_type}{VTableTree}(obj) <- value
-
-\S4method{obj_round_type}{PreDataTableLayouts}(obj)
-
-\S4method{obj_round_type}{PreDataTableLayouts}(obj) <- value
 
 \S4method{rbind2}{VTableNodeInfo,missing}(x, y)
 

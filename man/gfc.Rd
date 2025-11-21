@@ -19,7 +19,7 @@ get_formatted_cells(obj, shell = FALSE, round_type = valid_round_type)
 
 \S4method{get_formatted_cells}{ElementaryTable}(obj, shell = FALSE, round_type = obj_round_type(obj))
 
-\S4method{get_formatted_cells}{TableRow}(obj, shell = FALSE, round_type = valid_round_type)
+\S4method{get_formatted_cells}{TableRow}(obj, shell = FALSE, round_type = obj_round_type(obj))
 
 \S4method{get_formatted_cells}{LabelRow}(obj, shell = FALSE, round_type = valid_round_type)
 

@@ -57,7 +57,7 @@ TableTree(
   header_section_div = NA_character_,
   trailing_section_div = NA_character_,
   inset = 0L,
-  round_type = valid_round_type
+  round_type = NULL
 )
 }
 \arguments{
