@@ -413,3 +413,47 @@ test_that("test for round_type and tt_at_path", {
     "sas"
   )
 })
+
+test_that("test for obj_round_type setter", {
+  skip_if_not_installed("dplyr")
+  require(dplyr, quietly = TRUE)
+  
+  tbl <- tt_to_export()
+  
+  kids <- tree_children(tbl)
+  round_type_kids <- vapply(kids, obj_round_type, "") 
+  expect_identical(
+    unname(round_type_kids),
+    rep("iec", 3)
+  )
+  
+  gkids <- tree_children(kids[[1]])
+  round_type_gkids <- vapply(gkids, obj_round_type, "") 
+  expect_identical(
+    unname(round_type_gkids),
+    rep("iec", 1)
+  )    
+  
+  # now modify the round_type using obj_round_type setter on table
+  # all children/grand_children will be updated
+  tbl_sas <- tbl
+  obj_round_type(tbl_sas) <- "sas"
+  expect_identical(obj_round_type(tbl_sas),
+                   "sas")
+  
+  kids <- tree_children(tbl_sas)
+  round_type_kids <- vapply(kids, obj_round_type, "") 
+  expect_identical(
+    unname(round_type_kids),
+    rep("sas", 3)
+  )  
+  
+  gkids <- tree_children(kids[[1]])
+  round_type_gkids <- vapply(gkids, obj_round_type, "") 
+  expect_identical(
+    unname(round_type_gkids),
+    rep("sas", 1)
+  )  
+  
+})
+
