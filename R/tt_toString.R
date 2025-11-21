@@ -707,8 +707,7 @@ setMethod(
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "TableRow",
-  function(obj, shell = FALSE, round_type = valid_round_type) {
-    round_type <- match.arg(round_type)
+  function(obj, shell = FALSE, round_type = obj_round_type(obj)) {
     # Parent row format and na_str
     pr_row_format <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
     pr_row_na_str <- obj_na_str(obj) %||% "NA"

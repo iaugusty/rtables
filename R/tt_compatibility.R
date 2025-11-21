@@ -11,7 +11,8 @@
 #'
 #' @family compatibility
 #' @export
-rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
+rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L, round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   vals <- list(...)
   if (is.null(row.name)) {
     row.name <- ""
@@ -41,7 +42,8 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
       name = row.name, ## XXX TODO
       cspan = csps,
       format = format,
-      table_inset = as.integer(inset)
+      table_inset = as.integer(inset),
+      round_type = round_type
     )
   }
 }

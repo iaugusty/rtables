@@ -309,7 +309,6 @@ setMethod(
 ## need to generalize this if we ever use it in a place other than tt_at_path
 ## currently tt_at_path doesn't support "*"
 .extract_through_path <- function(cur_tbl, cur_path, no_stop = FALSE) {
-  if (is(cur_tbl, "VTableTree")) round_type <- obj_round_type(cur_tbl)
   while (length(cur_path > 0)) {
     kids <- tree_children(cur_tbl)
     curname <- cur_path[1]
@@ -319,7 +318,6 @@ setMethod(
     } else if (curname %in% kids_names) {
       ## we're now guarnateed that there will only be one match
       cur_tbl <- kids[kids_names == curname][[1]]
-      # note that this step round_type is lost
     } else if (!no_stop && curname == "*") {
       stop("Paths including '*' wildcards are not currently supported by tt_at_path.")
     } else if (!no_stop) {
@@ -332,8 +330,6 @@ setMethod(
     }
     cur_path <- cur_path[-1]
   }
-  # set round_type to state from input
-  if (is(cur_tbl, "VTableTree")) obj_round_type(cur_tbl) <- round_type
   cur_tbl
 }
 

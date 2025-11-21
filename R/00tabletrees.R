@@ -1290,7 +1290,8 @@ setClass("VTableNodeInfo",
     format = "FormatSpec",
     na_str = "character",
     indent_modifier = "integer",
-    table_inset = "integer"
+    table_inset = "integer",
+    round_type = "character"
   )
 )
 
@@ -1326,7 +1327,9 @@ LabelRow <- function(lev = 1L,
                      cinfo = EmptyColInfo,
                      indent_mod = 0L,
                      table_inset = 0L,
-                     trailing_section_div = NA_character_) {
+                     trailing_section_div = NA_character_,
+                     round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   check_ok_label(label)
   new("LabelRow",
     leaf_value = list(),
@@ -1340,7 +1343,8 @@ LabelRow <- function(lev = 1L,
     visible = vis,
     indent_modifier = as.integer(indent_mod),
     table_inset = as.integer(table_inset),
-    trailing_section_div = trailing_section_div
+    trailing_section_div = trailing_section_div,
+    round_type = round_type
   )
 }
 
@@ -1394,7 +1398,9 @@ setClass("LabelRow",
                       indent_mod = 0L,
                       footnotes = list(),
                       table_inset = 0L,
-                      trailing_section_div = NA_character_) {
+                      trailing_section_div = NA_character_,
+                      round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   if ((missing(name) || is.null(name) || is.na(name) || nchar(name) == 0) && !missing(label)) {
     name <- label
   }
@@ -1422,7 +1428,8 @@ setClass("LabelRow",
     indent_modifier = indent_mod,
     row_footnotes = footnotes,
     table_inset = table_inset,
-    trailing_section_div = trailing_section_div
+    trailing_section_div = trailing_section_div,
+    round_type = round_type
   )
   rw <- set_format_recursive(rw, format, na_str, FALSE)
   rw
@@ -1457,8 +1464,7 @@ setClass("VTableTree",
     page_titles = "character",
     horizontal_sep = "character",
     header_section_div = "character",
-    trailing_section_div = "character",
-    round_type = "character"
+    trailing_section_div = "character"
   )
 )
 
@@ -1570,6 +1576,22 @@ uniqify_child_names <- function(kidlst) {
     names(kidlst)[inds] <- newnms
   }
   kidlst
+}
+
+# if input round_type is not defined (length 0) retrieve round_type from kids
+# and check all kids have the same round_type
+.determine_round_type <- function(round_type, kids) {
+  if (length(round_type) == 0) {
+    if ((length(kids) > 0)) {
+      round_type <- unique(vapply(kids, obj_round_type, ""))
+      stopifnot(length(round_type) == 1)
+    } else {
+      # no kids and round_type not set
+      ## continue with default value iec
+      round_type <- valid_round_type[1] # iec
+    }
+  } 
+  round_type
 }
 
 
@@ -1713,10 +1735,17 @@ TableTree <- function(kids = list(),
                       header_section_div = NA_character_,
                       trailing_section_div = NA_character_,
                       inset = 0L,
-                      round_type = valid_round_type) {
-  round_type <- match.arg(round_type)
+                      round_type = NULL) {
   check_ok_label(label)
   cinfo <- .calc_cinfo(cinfo, cont, kids)
+  
+  # derive appropriate round_type to use
+  # either from input or retrieved from kids
+  round_type <- .determine_round_type(round_type, kids)
+  # also set this round_type to direct kids
+  # note that (some/most) obj_round_type setters will also set round_type of kids
+  # this will ensure only 1 round_type is present on all slots in the resulting tabletree
+  kids <- lapply(kids, `obj_round_type<-`, value = round_type)  
 
   kids <- .enforce_valid_kids(kids, cinfo)
   if (isTRUE(iscontent) && !is.null(cont) && nrow(cont) > 0) {
