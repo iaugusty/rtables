@@ -4,11 +4,10 @@
 \alias{obj_round_type,PreDataTableLayouts-method}
 \alias{obj_round_type,VTableTree-method}
 \alias{obj_round_type,TableRow-method}
+\alias{obj_round_type,CellValue-method}
 \alias{obj_round_type<-,VTableTree-method}
 \alias{obj_round_type<-,TableRow-method}
-\alias{obj_round_type<-,DataRow-method}
 \alias{obj_round_type<-,LabelRow-method}
-\alias{obj_round_type<-,ContentRow-method}
 \alias{obj_round_type<-,CellValue-method}
 \title{generics and methods for obj_round_type}
 \usage{
@@ -18,15 +17,13 @@
 
 \S4method{obj_round_type}{TableRow}(obj)
 
+\S4method{obj_round_type}{CellValue}(obj)
+
 \S4method{obj_round_type}{VTableTree}(obj) <- value
 
 \S4method{obj_round_type}{TableRow}(obj) <- value
 
-\S4method{obj_round_type}{DataRow}(obj) <- value
-
 \S4method{obj_round_type}{LabelRow}(obj) <- value
-
-\S4method{obj_round_type}{ContentRow}(obj) <- value
 
 \S4method{obj_round_type}{CellValue}(obj) <- value
 }

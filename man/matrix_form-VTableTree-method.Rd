@@ -33,7 +33,7 @@ by \code{fontspec}) that should be placed between columns when the table
 is rendered directly to text (e.g., by \code{toString} or \code{export_as_txt}). Defaults
 to \code{3}.}
 
-\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+\item{round_type}{(\code{"iec"} (default), \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
 See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 }
 \value{

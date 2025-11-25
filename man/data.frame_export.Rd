@@ -51,7 +51,7 @@ used again to create a \code{TableTree} object with \code{\link[=df_to_tt]{df_to
 \item{verbose}{(\code{flag})\cr when \code{TRUE}, the function will print additional information for
 \code{data_format != "full_precision"}.}
 
-\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+\item{round_type}{(\code{"iec"} (default), \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
 See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 
 \item{...}{additional arguments passed to spec-specific result data frame function (\code{spec}). When

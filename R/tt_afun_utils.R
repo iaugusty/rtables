@@ -4,6 +4,7 @@
 #'
 #' @inheritParams compat_args
 #' @inheritParams lyt_args
+#' @inheritParams gen_args
 #' @param x (`ANY`)\cr cell value.
 #' @param format (`string` or `function`)\cr the format label (string) or `formatters` function to apply to `x`.
 #'   See [formatters::list_valid_format_labels()] for currently supported format labels.

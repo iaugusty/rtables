@@ -39,7 +39,7 @@ get_cell_aligns(obj)
 \item{shell}{(\code{flag})\cr whether the formats themselves should be returned instead of the values with formats
 applied. Defaults to \code{FALSE}.}
 
-\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+\item{round_type}{(\code{"iec"} (default), \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
 See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 }
 \value{

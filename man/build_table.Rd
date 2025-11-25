@@ -39,7 +39,7 @@ the table when rendered as text. Defaults to a connected horizontal line (unicod
 charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
 information.}
 
-\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+\item{round_type}{(\code{"iec"} (default), \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
 See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 
 \item{...}{ignored.}

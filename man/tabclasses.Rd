@@ -120,7 +120,7 @@ or \code{NA_character_} for none (the default). When generated via layouting, th
 \item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
 main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 
-\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+\item{round_type}{(\code{"iec"} (default), \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
 See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 
 \item{cont}{(\code{ElementaryTable})\cr content table.}

@@ -1999,6 +1999,7 @@ RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
 #'
 #' @inheritParams lyt_args
 #' @inheritParams rcell
+#' @inheritParams gen_args
 #' @param val (`ANY`)\cr value in the cell exactly as it should be passed to a formatter or returned when extracted.
 #'
 #' @return An object representing the value within a single cell within a populated table. The underlying structure
