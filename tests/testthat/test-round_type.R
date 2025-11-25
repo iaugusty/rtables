@@ -16,18 +16,16 @@ prep_exp_str <- function(colheader, txtvals, txt, totl = 28, len = 6) {
   exp_str
 }
 
+vals <- c(1.865, 2.985, 3.457)
+txtvals_iec <- mapply(format_value, x = vals, format = "xx.xx", round_type = "iec")
+txtvals_sas <- mapply(format_value, x = vals, format = "xx.xx", round_type = "sas")
+
+# adjust vals if following is not TRUE
+expect_true(any(txtvals_iec != txtvals_sas))
 
 test_that("round_type can be set on basic_table", {
   skip_if_not_installed("dplyr")
   require(dplyr, quietly = TRUE)
-
-  vals <- c(1.865, 2.985, 3.457)
-
-  txtvals_iec <- mapply(format_value, x = vals, format = "xx.xx", round_type = "iec")
-  txtvals_sas <- mapply(format_value, x = vals, format = "xx.xx", round_type = "sas")
-
-  # adjust vals if following is not TRUE
-  expect_true(any(txtvals_iec != txtvals_sas))
 
   adsl <- ex_adsl
 
@@ -93,17 +91,9 @@ test_that("round_type can be set on basic_table", {
 })
 
 
-test_that("toString method works correclty with user defined round_type", {
+test_that("toString method works correctly with user defined round_type", {
   skip_if_not_installed("dplyr")
   require(dplyr, quietly = TRUE)
-
-  vals <- c(1.865, 2.985, 3.457)
-
-  txtvals_iec <- mapply(format_value, x = vals, format = "xx.xx", round_type = "iec")
-  txtvals_sas <- mapply(format_value, x = vals, format = "xx.xx", round_type = "sas")
-
-  # adjust vals if following is not TRUE
-  expect_true(any(txtvals_iec != txtvals_sas))
 
   adsl <- ex_adsl
 
@@ -274,14 +264,6 @@ test_that("test for get_formatted_cells", {
   skip_if_not_installed("dplyr")
   require(dplyr, quietly = TRUE)
 
-  vals <- c(1.865, 2.985, 3.457)
-
-  txtvals_iec <- mapply(format_value, x = vals, format = "xx.xx", round_type = "iec")
-  txtvals_sas <- mapply(format_value, x = vals, format = "xx.xx", round_type = "sas")
-
-  # adjust vals if following is not TRUE
-  expect_true(any(txtvals_iec != txtvals_sas))
-
   adsl <- ex_adsl
 
   adsl <- adsl %>%
@@ -323,14 +305,6 @@ test_that("test for get_formatted_cells", {
 test_that("test for matrix_form", {
   skip_if_not_installed("dplyr")
   require(dplyr, quietly = TRUE)
-
-  vals <- c(1.865, 2.985, 3.457)
-
-  txtvals_iec <- mapply(format_value, x = vals, format = "xx.xx", round_type = "iec")
-  txtvals_sas <- mapply(format_value, x = vals, format = "xx.xx", round_type = "sas")
-
-  # adjust vals if following is not TRUE
-  expect_true(any(txtvals_iec != txtvals_sas))
 
   adsl <- ex_adsl
 
@@ -454,6 +428,44 @@ test_that("test for obj_round_type setter", {
     unname(round_type_gkids),
     rep("sas", 1)
   )  
+  
+})
+
+test_that("test round_type in rtable", {
+
+  t1 <- rtable(header = c("A", "B"), format = "xx.xx", rrow("row 1", vals[1], vals[2]))
+  expect_identical(obj_round_type(t1), "iec")
+  
+  t2 <- t1
+  obj_round_type(t2) <- "sas"
+  expect_identical(obj_round_type(t2), "sas")
+ 
+  t3 <- rtable(header = c("A", "B"), format = "xx.xx", rrow("row 1", vals[1], vals[2]), round_type = "sas")
+  expect_identical(t2, t3)
+  
+})
+
+test_that("test round_type in rrow and rrowl", {
+  
+  rrw1 <- rrow("row 1", vals[1], vals[2], format = "xx.xx")
+  expect_identical(obj_round_type(rrw1), "iec")
+  
+  rrw2 <- rrw1
+  obj_round_type(rrw2) <- "sas"
+  expect_identical(obj_round_type(rrw2), "sas")
+  
+  rrw3 <- rrow("row 1", vals[1], vals[2], format = "xx.xx", round_type = "sas")
+  expect_identical(rrw2, rrw3)
+
+  rrwl1 <- rrowl("row 1", vals[1], vals[2], format = "xx.xx")
+  expect_identical(obj_round_type(rrwl1), "iec")
+  
+  rrwl2 <- rrwl1
+  obj_round_type(rrwl2) <- "sas"
+  expect_identical(obj_round_type(rrwl2), "sas")
+  
+  rrwl3 <- rrowl("row 1", vals[1], vals[2], format = "xx.xx", round_type = "sas")
+  expect_identical(rrwl2, rrwl3)  
   
 })
 

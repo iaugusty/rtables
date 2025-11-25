@@ -32,7 +32,9 @@ rcell <- function(x,
                   footnotes = NULL,
                   align = NULL,
                   format_na_str = NULL,
-                  stat_names = NULL) {
+                  stat_names = NULL,
+                  round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   checkmate::assert_character(stat_names, null.ok = TRUE)
   if (!is.null(align)) {
     check_aligns(align)
@@ -79,7 +81,8 @@ rcell <- function(x,
       indent_mod = indent_mod,
       footnotes = footnotes,
       format_na_str = format_na_str,
-      stat_names = stat_names %||% NA_character_
+      stat_names = stat_names %||% NA_character_,
+      round_type = round_type
     ) # RefFootnote(footnote))
   }
   if (!is.null(align)) {

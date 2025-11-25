@@ -1404,7 +1404,7 @@ setClass("LabelRow",
   if ((missing(name) || is.null(name) || is.na(name) || nchar(name) == 0) && !missing(label)) {
     name <- label
   }
-  vals <- lapply(vals, rcell)
+  vals <- lapply(vals, rcell, round_type = round_type)
   rlabels <- unique(unlist(lapply(vals, obj_label)))
   if ((missing(label) || is.null(label) || identical(label, "")) && sum(nzchar(rlabels)) == 1) {
     label <- rlabels[nzchar(rlabels)]
@@ -2014,7 +2014,9 @@ RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
 ## indent_mod: indent modifier to be used for parent row
 CellValue <- function(val, format = NULL, colspan = 1L, label = NULL,
                       indent_mod = NULL, footnotes = NULL,
-                      align = NULL, format_na_str = NULL, stat_names = NA_character_) {
+                      align = NULL, format_na_str = NULL, stat_names = NA_character_,
+                      round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   if (is.null(colspan)) {
     colspan <- 1L
   }
@@ -2039,6 +2041,7 @@ CellValue <- function(val, format = NULL, colspan = 1L, label = NULL,
     align = align,
     format_na_str = format_na_str,
     stat_names = stat_names,
+    round_type = round_type,
     class = "CellValue"
   )
   ret

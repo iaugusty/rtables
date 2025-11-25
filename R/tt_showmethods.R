@@ -349,16 +349,14 @@ setMethod(
 
 #' @rdname int_methods
 setMethod("print", "VTableTree", function(x, ...) {
-  round_type <- obj_round_type(x)
-  msg <- toString(x, round_type = round_type, ...)
+  msg <- toString(x, ...)
   cat(msg)
   invisible(x)
 })
 
 #' @rdname int_methods
 setMethod("show", "VTableTree", function(object) {
-  round_type <- obj_round_type(object)
-  cat(toString(object, round_type = round_type))
+  cat(toString(object))
   invisible(object)
 })
 

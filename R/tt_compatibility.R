@@ -73,11 +73,12 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L, roun
 #'
 #' @family compatibility
 #' @export
-rrowl <- function(row.name, ..., format = NULL, indent = 0, inset = 0L) {
+rrowl <- function(row.name, ..., format = NULL, indent = 0, inset = 0L, round_type = valid_round_type) {
   dots <- list(...)
   args_list <- c(list(
     row.name = row.name, format = format,
-    indent = indent, inset = inset
+    indent = indent, inset = inset,
+    round_type = round_type
   ), val = unlist(lapply(dots, as.list), recursive = FALSE))
   do.call(rrow, args_list)
 }
