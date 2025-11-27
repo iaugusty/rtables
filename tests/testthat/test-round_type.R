@@ -1,7 +1,5 @@
 context("Printing tables with proper round_type")
 
-
-
 prep_exp_str <- function(colheader, txtvals, txt, totl = 28, len = 6) {
   colheader <- substr(paste(strrep(" ", len), paste(sprintf("%-7s", colheader), collapse = " ")), 1, totl)
   txtvals <- paste(substr(paste(txt, paste(sprintf("%-7s", txtvals), collapse = " ")), 1, totl - 1), "\n")
@@ -16,39 +14,16 @@ prep_exp_str <- function(colheader, txtvals, txt, totl = 28, len = 6) {
   exp_str
 }
 
-vals <- c(1.865, 2.985, 3.457)
-txtvals_iec <- mapply(format_value, x = vals, format = "xx.xx", round_type = "iec")
-txtvals_sas <- mapply(format_value, x = vals, format = "xx.xx", round_type = "sas")
+txtvals_iec <- vals_round_type_fmt(vals = vals_round_type, round_type = "iec")
+txtvals_sas <- vals_round_type_fmt(vals = vals_round_type, round_type = "sas")
 
-# adjust vals if following is not TRUE
+# confirm that at least one value is different
 expect_true(any(txtvals_iec != txtvals_sas))
 
 test_that("round_type can be set on basic_table", {
   skip_if_not_installed("dplyr")
-  require(dplyr, quietly = TRUE)
 
-  adsl <- ex_adsl
-
-  adsl <- adsl %>%
-    mutate(new_var = case_when(
-      ARMCD == "ARM A" ~ vals[1],
-      ARMCD == "ARM B" ~ vals[2],
-      ARMCD == "ARM C" ~ vals[3]
-    ))
-
-  lyt <- basic_table(show_colcounts = FALSE, round_type = "sas") %>%
-    split_cols_by("ARMCD") %>%
-    analyze(c("new_var"), function(x) {
-      in_rows(
-        mean = mean(x),
-        .formats = c("xx.xx"),
-        .labels = c("Mean")
-      )
-    })
-
-
-  tbl_sas <- lyt %>%
-    build_table(adsl)
+  tbl_sas <- tt_to_test_round_type(round_type = "sas")
 
   expect_identical(
     obj_round_type(tbl_sas),
@@ -64,12 +39,9 @@ test_that("round_type can be set on basic_table", {
     "iec"
   )
   
-  # rounding method can be changed without the need to rebuild the table
+  # disallowed rounding method will give error
   tbl_fake <- tbl_sas
   expect_error(obj_round_type(tbl_fake) <- "fake")
-  
-  
-
 
   # actual formatted values are as required
   colheader <- c("ARM A", "ARM B", "ARM C")
@@ -95,30 +67,8 @@ test_that("toString method works correctly with user defined round_type", {
   skip_if_not_installed("dplyr")
   require(dplyr, quietly = TRUE)
 
-  adsl <- ex_adsl
-
-  adsl <- adsl %>%
-    mutate(new_var = case_when(
-      ARMCD == "ARM A" ~ vals[1],
-      ARMCD == "ARM B" ~ vals[2],
-      ARMCD == "ARM C" ~ vals[3]
-    ))
-
-  lyt <- basic_table(show_colcounts = FALSE, round_type = "sas") %>%
-    split_cols_by("ARMCD") %>%
-    analyze(c("new_var"), function(x) {
-      in_rows(
-        mean = mean(x),
-        .formats = c("xx.xx"),
-        .labels = c("Mean")
-      )
-    })
-
-  tbl_iec <- lyt %>%
-    build_table(adsl, round_type = "iec")
-
-  tbl_sas <- lyt %>%
-    build_table(adsl)
+  tbl_sas <- tt_to_test_round_type(round_type = "sas")
+  tbl_iec <- tt_to_test_round_type(round_type_tbl = "iec")
 
   # round type can be modified without re-building table
   tbl_iec2 <- tbl_sas
@@ -226,25 +176,8 @@ test_that("toString method works correctly with user defined round_type", {
 })
 
 test_that("round_type still available on subtable", {
-  adsl <- ex_adsl %>%
-    filter(SEX %in% c("F", "M"))
-
-  lyt <- basic_table(show_colcounts = FALSE, round_type = "sas") %>%
-    split_cols_by("ARMCD") %>%
-    split_rows_by("SEX", split_fun = drop_split_levels) %>%
-    analyze(c("AGE"), function(x) {
-      in_rows(
-        mean = mean(x),
-        .formats = c("xx.xx"),
-        .labels = c("Mean")
-      )
-    })
-
-  tbl_iec <- lyt %>%
-    build_table(adsl, round_type = "iec")
-
-  tbl_sas <- lyt %>%
-    build_table(adsl)
+  tbl_iec <- tt_to_test_round_type2(round_type = "iec")
+  tbl_sas <- tt_to_test_round_type2(round_type = "sas")
 
   sub_tbl <- tbl_sas[c("SEX", "F"), ]
   expect_identical(
@@ -264,28 +197,7 @@ test_that("test for get_formatted_cells", {
   skip_if_not_installed("dplyr")
   require(dplyr, quietly = TRUE)
 
-  adsl <- ex_adsl
-
-  adsl <- adsl %>%
-    mutate(new_var = case_when(
-      ARMCD == "ARM A" ~ vals[1],
-      ARMCD == "ARM B" ~ vals[2],
-      ARMCD == "ARM C" ~ vals[3]
-    ))
-
-  lyt <- basic_table(show_colcounts = FALSE, round_type = "sas") %>%
-    split_cols_by("ARMCD") %>%
-    analyze(c("new_var"), function(x) {
-      in_rows(
-        mean = mean(x),
-        .formats = c("xx.xx"),
-        .labels = c("Mean")
-      )
-    })
-
-
-  tbl_sas <- lyt %>%
-    build_table(adsl)
+  tbl_sas  <- tt_to_test_round_type(round_type = "sas")
 
   form_cells <- get_formatted_cells(tbl_sas)
 
@@ -306,28 +218,7 @@ test_that("test for matrix_form", {
   skip_if_not_installed("dplyr")
   require(dplyr, quietly = TRUE)
 
-  adsl <- ex_adsl
-
-  adsl <- adsl %>%
-    mutate(new_var = case_when(
-      ARMCD == "ARM A" ~ vals[1],
-      ARMCD == "ARM B" ~ vals[2],
-      ARMCD == "ARM C" ~ vals[3]
-    ))
-
-  lyt <- basic_table(show_colcounts = FALSE, round_type = "sas") %>%
-    split_cols_by("ARMCD") %>%
-    analyze(c("new_var"), function(x) {
-      in_rows(
-        mean = mean(x),
-        .formats = c("xx.xx"),
-        .labels = c("Mean")
-      )
-    })
-
-
-  tbl_sas <- lyt %>%
-    build_table(adsl)
+  tbl_sas <- tt_to_test_round_type(round_type = "sas")
 
   # when round_type is not specified, the round_type attribute from the table will be used
   mpf <- matrix_form(tbl_sas)
@@ -359,22 +250,7 @@ test_that("test for round_type and tt_at_path", {
   skip_if_not_installed("dplyr")
   require(dplyr, quietly = TRUE)
 
-  adsl <- ex_adsl %>%
-    filter(SEX %in% c("F", "M"))
-
-  lyt <- basic_table(show_colcounts = FALSE, round_type = "sas") %>%
-    split_cols_by("ARMCD") %>%
-    split_rows_by("SEX", split_fun = drop_split_levels) %>%
-    analyze(c("AGE"), function(x) {
-      in_rows(
-        mean = mean(x),
-        .formats = c("xx.xx"),
-        .labels = c("Mean")
-      )
-    })
-
-  tbl_sas <- lyt %>%
-    build_table(adsl)
+  tbl_sas <- tt_to_test_round_type2(round_type = "sas")  
 
   expect_identical(
     obj_round_type(tbl_sas),
@@ -433,38 +309,38 @@ test_that("test for obj_round_type setter", {
 
 test_that("test round_type in rtable", {
 
-  t1 <- rtable(header = c("A", "B"), format = "xx.xx", rrow("row 1", vals[1], vals[2]))
+  t1 <- rtable(header = c("A", "B"), format = "xx.xx", rrow("row 1", vals_round_type[1], vals_round_type[2]))
   expect_identical(obj_round_type(t1), "iec")
   
   t2 <- t1
   obj_round_type(t2) <- "sas"
   expect_identical(obj_round_type(t2), "sas")
  
-  t3 <- rtable(header = c("A", "B"), format = "xx.xx", rrow("row 1", vals[1], vals[2]), round_type = "sas")
+  t3 <- rtable(header = c("A", "B"), format = "xx.xx", rrow("row 1", vals_round_type[1], vals_round_type[2]), round_type = "sas")
   expect_identical(t2, t3)
   
 })
 
 test_that("test round_type in rrow and rrowl", {
   
-  rrw1 <- rrow("row 1", vals[1], vals[2], format = "xx.xx")
+  rrw1 <- rrow("row 1", vals_round_type[1], vals_round_type[2], format = "xx.xx")
   expect_identical(obj_round_type(rrw1), "iec")
   
   rrw2 <- rrw1
   obj_round_type(rrw2) <- "sas"
   expect_identical(obj_round_type(rrw2), "sas")
   
-  rrw3 <- rrow("row 1", vals[1], vals[2], format = "xx.xx", round_type = "sas")
+  rrw3 <- rrow("row 1", vals_round_type[1], vals_round_type[2], format = "xx.xx", round_type = "sas")
   expect_identical(rrw2, rrw3)
 
-  rrwl1 <- rrowl("row 1", vals[1], vals[2], format = "xx.xx")
+  rrwl1 <- rrowl("row 1", vals_round_type[1], vals_round_type[2], format = "xx.xx")
   expect_identical(obj_round_type(rrwl1), "iec")
   
   rrwl2 <- rrwl1
   obj_round_type(rrwl2) <- "sas"
   expect_identical(obj_round_type(rrwl2), "sas")
   
-  rrwl3 <- rrowl("row 1", vals[1], vals[2], format = "xx.xx", round_type = "sas")
+  rrwl3 <- rrowl("row 1", vals_round_type[1], vals_round_type[2], format = "xx.xx", round_type = "sas")
   expect_identical(rrwl2, rrwl3)  
   
 })
