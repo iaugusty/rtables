@@ -2,6 +2,7 @@
 
 ### New Features
  * Allow table objects to have `round_type` instead of needing to specify on export #1040
+ * New `obj_round_type` getter and setter methods.
 
 ## rtables 0.6.14
 
