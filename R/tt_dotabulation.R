@@ -1414,6 +1414,10 @@ build_table <- function(lyt, df,
     )
   }
 
+  if (is.null(alt_counts_df)) {
+    alt_counts_df <- df
+  }
+
   rtpos <- TreePos()
   cinfo <- create_colinfo(lyt, df, rtpos,
     counts = col_counts,
