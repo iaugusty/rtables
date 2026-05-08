@@ -1,4 +1,14 @@
-## rtables 0.6.14.9000
+## rtables 0.6.15.9005
+
+### New Features
+ * Added `restrict_facets` function factory for use with `make_split_fun`
+ * Exportd previously internal `make_subset_expr` for use when constructing custom splitting behavior
+
+## rtables 0.6.15
+
+### New Features
+ * Allow table objects to have `round_type` instead of needing to specify on export #1040
+ * New `obj_round_type` getter and setter methods.
 
 ## rtables 0.6.14
 
